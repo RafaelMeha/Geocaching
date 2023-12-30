@@ -1,0 +1,27 @@
+{    
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "gdb - Debug project",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\prog.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            /* This calls the debug task in "tasks.json" prior to debugging */
+            "preLaunchTask": "C/C++: call make debug",
+            "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe"
+        }
+    ]
+}
