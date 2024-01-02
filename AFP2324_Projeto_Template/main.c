@@ -2,28 +2,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_CODES 2000
-#define MAX_LINE_LENGTH 1024
+#define MAX_CODES 2000  // Define the maximum number of geocaches
+#define MAX_LINE_LENGTH 1024  // Define the maximum length of a line in the file
 
+// Define a structure to store information about a geocache
 typedef struct {
-    char *code;
-    char *name;
-    char *state;
-    char *owner;
-    double latitude;
-    double longitude;
-    char *kind;
-    char *size;
-    double difficulty;
-    double terrain;
-    char *status;
-    char *hidden_date;
-    int founds;
-    int not_found;
-    int favourites;
-    int altitude;
+    char *code; // Unique code of the geocache
+    char *name; // Name of the geocache
+    char *state; // State where the geocache is located
+    char *owner; // Owner of the geocache
+    double latitude; // Latitude coordinate
+    double longitude; // Longitude coordinate
+    char *kind; // Type of the geocache
+    char *size; // Size of the geocache
+    double difficulty; // Difficulty rating
+    double terrain; // Terrain rating
+    char *status; // Status of the geocache (active, inactive, etc.)
+    char *hidden_date; // Date when the geocache was hidden
+    int founds; // Number of times found
+    int not_found; // Number of times not found
+    int favourites; // Number of times marked as favourite
+    int altitude; // Altitude of the location
 } Cache;
 
+// Function to free memory allocated for a geocache
 void freeGeocache(Cache *gc) {
     free(gc->code);
     free(gc->name);
@@ -35,6 +37,7 @@ void freeGeocache(Cache *gc) {
     free(gc->hidden_date);
 }
 
+// Function to clear all geocaches from memory
 void clearGeocaches(Cache **geocaches, int *geocacheCount) {
     for (int i = 0; i < *geocacheCount; i++) {
         freeGeocache(&(*geocaches)[i]);
@@ -45,7 +48,10 @@ void clearGeocaches(Cache **geocaches, int *geocacheCount) {
     printf("\n\033[1;32mGeocaches cleared.\n\033[0m");
 }
 
+// Function to load geocaches from a file
 void getGeocaches(char *file, Cache **geocaches, int *geocacheCount) {
+    // This function opens the file, reads each line, parses the data, 
+    // and stores it in the geocaches array
     FILE *f = fopen(file, "r");
     if (!f) {
         printf("\n\033[1;31mFile could not be opened.\n\033[0m");
@@ -129,9 +135,13 @@ void getGeocaches(char *file, Cache **geocaches, int *geocacheCount) {
     }
     fclose(f);
     printf("\n\033[1;32m%d geocaches loaded.\n\033[0m", *geocacheCount);
+    
 }
 
+// Function to list all geocaches
 void listGeocaches(Cache *geocaches, int geocacheCount) {
+    // This function iterates through the geocaches array and prints 
+    // the details of each geocache
     if (geocaches == NULL || geocacheCount == 0) {
         printf("\n\033[1;31mNo geocaches to display.\n\033[0m");
         return;
@@ -160,8 +170,10 @@ void listGeocaches(Cache *geocaches, int geocacheCount) {
     }
 }
 
-
+// Main function
 int main() {
+    // This is the main function where the user can choose different options 
+    // like loading geocaches, clearing them, listing them, etc.
     Cache *geocaches = NULL;
     int geocacheCount = 0;
     int option;
