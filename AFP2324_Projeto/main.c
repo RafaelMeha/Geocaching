@@ -15,7 +15,7 @@ int main() {
 
     do {
         printf("\n\033[1;34m---- GEOCACHING ----\n\033[0m\n");
-        printf("\033[1;36m1. Load\n2. Clear\n3. Quit\n4. List\n5. FoundP\033[0m\n\033[1;35m\n6. Matrix\nChoose an option: \033[0m");
+        printf("\033[1;36m1. Load\n2. Clear\n3. Quit\n4. List\n5. FoundP\n6. Search\033[0m\n\033[1;35m\nChoose an option: \033[0m");
         scanf("%d", &option);
         getchar();
 
@@ -66,7 +66,15 @@ int main() {
                 foundPercentage(geocaches, geocacheCount);
                 break;
             case 6:
-                calculateMatrix81(geocaches, geocacheCount);
+                if (geocacheCount > 0) {
+                    char searchCode[50];
+                    printf("Enter the code of the geocache to search: ");
+                    fgets(searchCode, sizeof(searchCode), stdin);
+                    searchCode[strcspn(searchCode, "\n")] = 0; // Remove newline character
+                    searchGeocacheByCode(geocaches, geocacheCount, searchCode);
+                } else {
+                    printf("No geocaches loaded.\n");
+                }
                 break;
             default:
                 printf("Invalid option.\n");

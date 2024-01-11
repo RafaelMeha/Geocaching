@@ -28,6 +28,4 @@ void getGeocaches(char *file, Cache **geocaches, int *geocacheCount);
 
 void listGeocaches(Cache *geocaches, int geocacheCount);
 
-void searchGeocacheCode(Cache **geocaches, int geocacheCount);
-
-void calculateMatrix81(Cache *geocaches, int geocacheCount);
+void searchGeocacheByCode(Cache *geocaches, int geocacheCount, char *searchCode);

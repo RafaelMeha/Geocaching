@@ -50,7 +50,22 @@ void getGeocaches(char *file, Cache **geocaches, int *geocacheCount) {
         Cache gc = {0};
 
         token = strtok(line, delimiter);
-        gc.code = token ? strdup(token) : NULL;
+        char *code = token ? strdup(token) : NULL;
+
+        int exists = 0;
+        for (int i = 0; i < *geocacheCount; i++) {
+            if (strcmp((*geocaches)[i].code, code) == 0) {
+                exists = 1;
+                break;
+            }
+        }
+
+        if (exists) {
+            free(code); // Free the duplicated code
+            continue; // Skip 
+        }
+
+        gc.code = code;
 
         token = strtok(NULL, delimiter);
         gc.name = token ? strdup(token) : NULL;
@@ -205,29 +220,36 @@ void foundPercentage(Cache *geocaches, int geocacheCount) {
 }
 
 
-void calculateMatrix81(Cache *geocaches, int geocacheCount) {
-    int matrix81[9][9] = {0};
+void searchGeocacheByCode(Cache *geocaches, int geocacheCount, char *searchCode) {
+    int found = 0;
 
     for (int i = 0; i < geocacheCount; i++) {
-        int terrainIndex = geocaches[i].terrain - 1;
-        int difficultyIndex = geocaches[i].difficulty - 1;
-        if (terrainIndex >= 0 && terrainIndex < 9 && difficultyIndex >= 0 && difficultyIndex < 9) {
-            matrix81[terrainIndex][difficultyIndex]++;
+        if (strcmp(geocaches[i].code, searchCode) == 0) {
+            printf("\nGeocache found:\n");
+            printf("\n| %d | %s | %s | %s | %s | %.6f | %.6f | %s | %s | %.1f | %.1f | %s | %s | %d | %d | %d | %d |\n", 
+    i + 1, 
+    geocaches[i].code, 
+    geocaches[i].name, 
+    geocaches[i].state, 
+    geocaches[i].owner, 
+    geocaches[i].latitude, 
+    geocaches[i].longitude, 
+    geocaches[i].kind, 
+    geocaches[i].size, 
+    geocaches[i].difficulty, 
+    geocaches[i].terrain, 
+    geocaches[i].status, 
+    geocaches[i].hidden_date, 
+    geocaches[i].founds, 
+    geocaches[i].not_found, 
+    geocaches[i].favourites, 
+    geocaches[i].altitude);
+            found = 1;
+            break;
         }
     }
 
-    printf("Matrix 81 (Difficulty vs Terrain)\n");
-    printf("    ");
-    for (int d = 1; d <= 9; d++) {
-        printf("%d ", d); 
-    }
-    printf("\n");
-
-    for (int t = 0; t < 9; t++) {
-        printf("%d | ", t + 1); 
-        for (int d = 0; d < 9; d++) {
-            printf("%d ", matrix81[t][d]);
-        }
-        printf("\n");
+    if (!found) {
+        printf("Geocache with code %s not found.\n", searchCode);
     }
 }
