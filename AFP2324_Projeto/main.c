@@ -68,12 +68,12 @@ int main() {
             case 6:
                 if (geocacheCount > 0) {
                     char searchCode[50];
-                    printf("Enter the code of the geocache to search: ");
+                    printf("\n\033[1;33mEnter the code of the geocache to search: \033[0m");
                     fgets(searchCode, sizeof(searchCode), stdin);
                     searchCode[strcspn(searchCode, "\n")] = 0; // Remove newline character
                     searchGeocacheByCode(geocaches, geocacheCount, searchCode);
                 } else {
-                    printf("No geocaches loaded.\n");
+                    printf("\n\033[1;31mNo geocaches loaded.\n\033[0m");
                 }
                 break;
             default:

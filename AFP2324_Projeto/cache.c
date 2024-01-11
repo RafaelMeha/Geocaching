@@ -61,8 +61,8 @@ void getGeocaches(char *file, Cache **geocaches, int *geocacheCount) {
         }
 
         if (exists) {
-            free(code); // Free the duplicated code
-            continue; // Skip 
+            free(code); 
+            continue; 
         }
 
         gc.code = code;
@@ -128,14 +128,14 @@ void getGeocaches(char *file, Cache **geocaches, int *geocacheCount) {
         (*geocacheCount)++;
     } 
     fclose(f);
-    printf("\n\033[1;32m%d geocaches loaded.\n\033[0m", *geocacheCount);
+    printf("\n\033[1;32m%d Geocaches loaded.\n\033[0m", *geocacheCount);
     
 }
 
 void listGeocaches(Cache *geocaches, int geocacheCount) {
     
     if (geocaches == NULL || geocacheCount == 0) {
-        printf("\n\033[1;31mno cache data.\n\033[0m");
+        printf("\n\033[1;31mNo geocaches loaded.\n\033[0m");
         return;
     }
 
@@ -182,7 +182,7 @@ void foundPercentage(Cache *geocaches, int geocacheCount) {
     nNotFounds = 0;
 
     if (geocaches == NULL || geocacheCount == 0) {
-        printf("\n\033[1;31mno cache data.\n\033[0m");
+        printf("\n\033[1;31mNo geocaches loaded.\n\033[0m");
         return;
     }
 
