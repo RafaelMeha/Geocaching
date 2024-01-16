@@ -29,3 +29,9 @@ void getGeocaches(char *file, Cache **geocaches, int *geocacheCount);
 void listGeocaches(Cache *geocaches, int geocacheCount);
 
 void searchGeocacheByCode(Cache *geocaches, int geocacheCount, char *searchCode);
+
+void showAge(Cache *geocaches, int geocacheCount);
+
+void sortGeocaches(Cache *geocaches, int geocacheCount);
+
+void showStateCounts(Cache *geocaches, int geocacheCount);

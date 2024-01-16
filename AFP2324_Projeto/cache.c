@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cache.h"
+#include "time.h"
+#include <limits.h> 
 
 #define MAX_CODES 2000  
 #define MAX_LINE_LENGTH 1024  
@@ -252,4 +254,158 @@ void searchGeocacheByCode(Cache *geocaches, int geocacheCount, char *searchCode)
     if (!found) {
         printf("Geocache with code %s not found.\n", searchCode);
     }
+}
+
+typedef struct {
+    int year;
+    int month;
+} YearMonth;
+
+// Function prototypes
+YearMonth parseDate(const char* dateStr);
+int monthDifference(YearMonth date1, YearMonth date2);
+
+void showAge(Cache *geocaches, int geocacheCount) {
+    if (geocacheCount == 0) {
+        printf("\033[1;31m\nNo geocache data available.\033[0m\n");
+        return;
+    }
+
+    YearMonth oldestDate = {INT_MAX, INT_MAX};
+    YearMonth newestDate = {0, 0};
+    Cache oldestCache, newestCache;
+
+    for (int i = 0; i < geocacheCount; i++) {
+        YearMonth date = parseDate(geocaches[i].hidden_date);
+
+        if ((date.year < oldestDate.year) || (date.year == oldestDate.year && date.month < oldestDate.month)) {
+            oldestDate = date;
+            oldestCache = geocaches[i];
+        }
+        if ((date.year > newestDate.year) || (date.year == newestDate.year && date.month > newestDate.month)) {
+            newestDate = date;
+            newestCache = geocaches[i];
+        }
+    }
+
+    int diff = monthDifference(oldestDate, newestDate);
+
+    printf("\nOldest Cache: %s (Date: %s)\n", oldestCache.name, oldestCache.hidden_date);
+    printf("Newest Cache: %s (Date: %s)\n", newestCache.name, newestCache.hidden_date);
+    printf("\n\033[1;32mDifference in months: %d\033[0m\n", diff);
+    }
+
+    YearMonth parseDate(const char* dateStr) {
+    YearMonth ym;
+    sscanf(dateStr, "%d-%d", &ym.year, &ym.month);
+    return ym;
+    }
+
+    int monthDifference(YearMonth date1, YearMonth date2) {
+    int years = date2.year - date1.year;
+    int months = date2.month - date1.month;
+    return years * 12 + months;
+}
+
+
+int compareByAltitude(const void *a, const void *b) {
+    Cache *cacheA = (Cache *)a;
+    Cache *cacheB = (Cache *)b;
+    return cacheB->altitude - cacheA->altitude; 
+}
+
+int compareByStateAndFounds(const void *a, const void *b) {
+    Cache *cacheA = (Cache *)a;
+    Cache *cacheB = (Cache *)b;
+    int stateComparison = strcmp(cacheA->state, cacheB->state);
+    if (stateComparison == 0) { 
+        return cacheB->founds - cacheA->founds;
+    }
+    return stateComparison;
+}
+
+int compareByHiddenDate(const void *a, const void *b) {
+    Cache *cacheA = (Cache *)a;
+    Cache *cacheB = (Cache *)b;
+    return strcmp(cacheB->hidden_date, cacheA->hidden_date); 
+}
+
+
+void sortGeocaches(Cache *geocaches, int geocacheCount) {
+    int sortOption;
+    printf("Choose sorting option:\n1 - By Altitude\n2 - By State\n3 - By Hidden Date\n");
+    scanf("%d", &sortOption);
+
+    switch (sortOption) {
+        case 1:
+            qsort(geocaches, geocacheCount, sizeof(Cache), compareByAltitude);
+            break;
+        case 2:
+            qsort(geocaches, geocacheCount, sizeof(Cache), compareByStateAndFounds);
+            break;
+        case 3:
+            qsort(geocaches, geocacheCount, sizeof(Cache), compareByHiddenDate);
+            break;
+        default:
+            printf("Invalid sorting option.\n");
+            return;
+    }
+
+    listGeocaches(geocaches, geocacheCount);
+}
+
+
+typedef struct {
+    char *state;
+    int availableCount;
+    int inactiveCount;
+} StateCount;
+
+
+void updateStateCounts(StateCount *counts, int *countSize, Cache cache) {
+    for (int i = 0; i < *countSize; i++) {
+        if (strcmp(counts[i].state, cache.state) == 0) {
+            if (strcmp(cache.status, "AVAILABLE") == 0) {
+                counts[i].availableCount++;
+            } else if (strcmp(cache.status, "INACTIVE") == 0) {
+                counts[i].inactiveCount++;
+            }
+            return;
+        }
+    }
+
+    StateCount newCount;
+    newCount.state = strdup(cache.state);
+    newCount.availableCount = (strcmp(cache.status, "AVAILABLE") == 0) ? 1 : 0;
+    newCount.inactiveCount = (strcmp(cache.status, "INACTIVE") == 0) ? 1 : 0;
+
+    counts[*countSize] = newCount;
+    (*countSize)++;
+}
+
+void showStateCounts(Cache *geocaches, int geocacheCount) {
+    if (geocacheCount == 0) {
+        printf("No geocache data available.\n");
+        return;
+    }
+
+    StateCount *stateCounts = malloc(MAX_CODES * sizeof(StateCount));
+    int countSize = 0;
+
+    for (int i = 0; i < geocacheCount; i++){
+        updateStateCounts(stateCounts, &countSize, geocaches[i]);
+    }
+
+    printf("State Counts (Available/Inactive):\n");
+    for (int i = 0; i < countSize; i++) {
+        printf("%s - Available: %d, Inactive: %d\n", 
+            stateCounts[i].state, 
+            stateCounts[i].availableCount, 
+            stateCounts[i].inactiveCount);
+    }
+
+    for (int i = 0; i < countSize; i++) {
+        free(stateCounts[i].state);
+    }
+    free(stateCounts);
 }

@@ -15,7 +15,7 @@ int main() {
 
     do {
         printf("\n\033[1;34m---- GEOCACHING ----\n\033[0m\n");
-        printf("\033[1;36m1. Load\n2. Clear\n3. Quit\n4. List\n5. FoundP\n6. Search\033[0m\n\033[1;35m\nChoose an option: \033[0m");
+        printf("\033[1;36m1. Load\n2. Clear\n3. Quit\n4. List\n5. FoundP\n6. Search\n9. Age\n10. Sort\n11. Statec\033[0m\n\033[1;35m\nChoose an option: \033[0m");
         scanf("%d", &option);
         getchar();
 
@@ -75,6 +75,19 @@ int main() {
                 } else {
                     printf("\n\033[1;31mNo geocaches loaded.\n\033[0m");
                 }
+                break;
+            case 9: 
+                showAge(geocaches, geocacheCount);
+                break;
+            case 10:
+                if (geocacheCount > 0) {
+                sortGeocaches(geocaches, geocacheCount);
+                    } else {
+                        printf("No geocaches loaded to sort.\n");
+                    }
+                break;
+            case 11:
+                showStateCounts(geocaches, geocacheCount);
                 break;
             default:
                 printf("Invalid option.\n");
