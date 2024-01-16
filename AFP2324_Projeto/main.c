@@ -23,7 +23,7 @@ int main() {
             case 1 :
 
                 if(geocacheCount > 0){
-                    printf("\033[31mCache data exists. Please clear it first.\n");  
+                    printf("\n\033[31mCache data exists. Please clear it first.\n");  
                 } else {
                     printf("\n\033[1;33mEnter filename: \033[0m");
                     fgets(file, sizeof(file), stdin);
