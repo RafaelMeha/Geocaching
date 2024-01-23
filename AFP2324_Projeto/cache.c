@@ -170,9 +170,7 @@ void listGeocaches(Cache *geocaches, int geocacheCount) {
 float calculatePercent(float nFounds, float nNotFounds){
     float res = 0;
     res = ((nFounds) / (nFounds + nNotFounds)) * 100;
-
     return res;
-
 }
 
 
@@ -261,7 +259,6 @@ typedef struct {
     int month;
 } YearMonth;
 
-// Function prototypes
 YearMonth parseDate(const char* dateStr);
 int monthDifference(YearMonth date1, YearMonth date2);
 

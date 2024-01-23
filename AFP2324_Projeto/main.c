@@ -21,7 +21,6 @@ int main() {
 
         switch(option) {
             case 1 :
-
                 if(geocacheCount > 0){
                     printf("\n\033[31mCache data exists. Please clear it first.\n");  
                 } else {
