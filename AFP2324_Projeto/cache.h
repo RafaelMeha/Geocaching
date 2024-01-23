@@ -17,7 +17,6 @@ typedef struct {
     int altitude; 
 } Cache;
 
-
 void freeGeocache(Cache *gc);
 
 void foundPercentage( Cache *geocaches, int geocacheCount);
