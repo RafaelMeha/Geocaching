@@ -34,3 +34,6 @@ void showAge(Cache *geocaches, int geocacheCount);
 void sortGeocaches(Cache *geocaches, int geocacheCount);
 
 void showStateCounts(Cache *geocaches, int geocacheCount);
+
+void calculateMatrix81(Cache *geocaches, int geocacheCount);
+

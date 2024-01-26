@@ -4,10 +4,10 @@
 #include "cache.h"
 #include "time.h"
 #include <limits.h> 
+#include <math.h>
 
 #define MAX_CODES 2000  
 #define MAX_LINE_LENGTH 1024  
-
 
 void freeGeocache(Cache *gc) {
     free(gc->code);
@@ -347,7 +347,6 @@ void sortGeocaches(Cache *geocaches, int geocacheCount) {
             printf("Invalid sorting option.\n");
             return;
     }
-
     listGeocaches(geocaches, geocacheCount);
 }
 
@@ -405,4 +404,33 @@ void showStateCounts(Cache *geocaches, int geocacheCount) {
         free(stateCounts[i].state);
     }
     free(stateCounts);
+}
+
+void calculateMatrix81(Cache *geocaches, int geocacheCount) {
+     if (geocaches == NULL || geocacheCount == 0) {
+        printf("\nNo geocaches loaded.\n");
+        return;
+    }
+ 
+    int matrix81[9][9] = {0};
+ 
+    for (int i = 0; i < geocacheCount; i++) {
+        int difficultyIndex = (geocaches[i].difficulty - 1) * 2;
+        int terrainIndex = (geocaches[i].terrain - 1) * 2;
+        matrix81[difficultyIndex][terrainIndex]++;
+    }
+ 
+    printf("\nM81 Table (Difficulty x Terrain):\n\n");
+ 
+    printf("    | 1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0\n");
+    printf("-------------------------------------------------\n");
+ 
+    for (int i = 0; i < 9; i++) {
+        printf("%2.1f |", 0.5 * (i + 2)); 
+ 
+        for (int j = 0; j < 9; j++) {
+            printf(" %3d ", matrix81[i][j]);
+        }
+        printf("\n");
+    }
 }
