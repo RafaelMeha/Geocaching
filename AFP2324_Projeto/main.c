@@ -64,17 +64,7 @@ int main() {
             case 5:
                 foundPercentage(geocaches, geocacheCount);
                 break;
-            case 6:
-                if (geocacheCount > 0) {
-                    char searchCode[50];
-                    printf("\n\033[1;33mEnter the code of the geocache to search: \033[0m");
-                    fgets(searchCode, sizeof(searchCode), stdin);
-                    searchCode[strcspn(searchCode, "\n")] = 0; // Remove newline character
-                    searchGeocacheByCode(geocaches, geocacheCount, searchCode);
-                } else {
-                    printf("\n\033[1;31mNo geocaches loaded.\n\033[0m");
-                }
-                break;
+
             case 9: 
                 showAge(geocaches, geocacheCount);
                 break;
