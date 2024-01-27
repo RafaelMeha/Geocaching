@@ -220,7 +220,39 @@ void foundPercentage(Cache *geocaches, int geocacheCount) {
 }
 
 
+void searchGeocacheByCode(Cache *geocaches, int geocacheCount, char *searchCode) {
+    int found = 0;
 
+    for (int i = 0; i < geocacheCount; i++) {
+        if (strcmp(geocaches[i].code, searchCode) == 0) {
+            printf("\nGeocache found:\n");
+            printf("\n| %d | %s | %s | %s | %s | %.6f | %.6f | %s | %s | %.1f | %.1f | %s | %s | %d | %d | %d | %d |\n", 
+    i + 1, 
+    geocaches[i].code, 
+    geocaches[i].name, 
+    geocaches[i].state, 
+    geocaches[i].owner, 
+    geocaches[i].latitude, 
+    geocaches[i].longitude, 
+    geocaches[i].kind, 
+    geocaches[i].size, 
+    geocaches[i].difficulty, 
+    geocaches[i].terrain, 
+    geocaches[i].status, 
+    geocaches[i].hidden_date, 
+    geocaches[i].founds, 
+    geocaches[i].not_found, 
+    geocaches[i].favourites, 
+    geocaches[i].altitude);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Geocache with code %s not found.\n", searchCode);
+    }
+}
 
 typedef struct {
     int year;
